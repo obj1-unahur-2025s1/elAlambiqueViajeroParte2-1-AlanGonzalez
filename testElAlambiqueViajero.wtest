@@ -1,4 +1,8 @@
+import alambique2c.*
 import elAlambiqueViajero.*
+
+
+
 test "luke cuenta cuando va de viaje"{
     luke.viajar(paris)
     assert.equals(1, luke.cantidadViajes())
@@ -55,10 +59,41 @@ test "luke viaja 2 veces, quiere viajar a Paris y no puede"{
 }
 
 test "luke viaja a hurlingham en el convertible convertido en chatarra" {
-  luke.vehiculo(convertible)
-  convertible.convertir(chatarra)
-  luke.viajar(hurlingham)
-  assert.equals("sticker de la Unahur",luke.recuerdo())
-  assert.equals(5,chatarra.cañones())
+    luke.vehiculo(convertible)
+    convertible.convertir(chatarra)
+    luke.viajar(hurlingham)
+    assert.equals("sticker de la Unahur",luke.recuerdo())
+    assert.equals(5,chatarra.cañones())
 
-  }
+}
+
+test "Si la carrera es en paris entonces moto queda afuera de los inscriptos" {
+    inscripcion.inscripciones()
+    assert.that(inscripcion.rechazados().contains(moto))
+}
+
+test "si tenemos una nueva carrera y es en bueno aires vehiculoTramposo no va a estar inscripto" {
+    inscripcion.inscripciones()
+    inscripcion.nuevaCiudad(buenosAires)
+    inscripcion.nuevaCarrera()
+    assert.that(inscripcion.rechazados().contains(vehiculoTramposo))
+}
+
+test "si la carra se hace en paris antigualla es el ganador" {
+    inscripcion.inscripciones()
+    assert.equals(antigualla, inscripcion.ganar())
+}
+
+test "si la carrera se hace en buenos aires, el ganador es el convertible que esta transformado en antigualla" {
+    convertible.convertir(antigualla)
+    inscripcion.inscripciones()
+    inscripcion.nuevaCiudad(buenosAires)
+    inscripcion.nuevaCarrera()
+    assert.equals(antigualla, inscripcion.ganar())
+}
+
+test "Si la carrera se hace en paris, y el vehiculoCambiaForma se hace moto esta no participa" {
+    vehiculoCambiaForma.convertir(moto)
+    inscripcion.inscripciones()
+    assert.that(inscripcion.rechazados().contains(vehiculoCambiaForma))
+}
